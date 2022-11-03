@@ -1,0 +1,173 @@
+import org.gradle.api.tasks.compile.JavaCompile
+
+import se.solrike.conventions.utils.ResourceLoader
+
+// Define Java conventions for Solrike
+
+plugins {
+  // built in plugins
+  id 'checkstyle'
+  id 'jacoco'
+  id 'java'
+
+  // https://github.com/diffplug/spotless/tree/main/plugin-gradle
+  id 'com.diffplug.spotless'
+  id 'com.github.spotbugs'
+  id 'org.owasp.dependencycheck'
+  id 'se.solrike.sonarlint'
+}
+
+/////// General /////////
+repositories {
+  mavenCentral()
+}
+
+
+
+/////// PLUGINS /////////
+
+// Checkstyle
+checkstyle {
+  toolVersion = '10.4'
+  config = project.resources.text.fromUri(ResourceLoader.loadAsUri('/plugin-config/checkstyle/rules.xml'))
+  ignoreFailures = false
+  maxWarnings = 0
+  // add all sources so that also properties files are checked
+  checkstyleMain.setSource(project.sourceSets.main.allSource)
+  checkstyleTest.setSource(project.sourceSets.test.allSource)
+  dependencies {
+    // Custom checks.
+    // checkstyle 'groupId:artifactId:version'
+  }
+}
+
+// run ./gradlew dependencyCheckAggregate
+dependencyCheck {
+  format = 'ALL'
+  autoUpdate = true
+  //suppressionFile = rootProject.file('build-config/dependency-check/suppressions.xml')
+  scanConfigurations = ['runtimeClasspath']
+  skipTestGroups = true
+  analyzers {
+    ossIndex {
+      enabled = true
+    }
+  }
+}
+
+
+// Java-library plugin - start
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+tasks.withType(JavaCompile).configureEach {
+  options.encoding = 'UTF-8'
+  // needed for jackson deserialization using class' constructor without need for additional jackson annotations.
+  options.compilerArgs << '-parameters'
+  // Enable deprecation messages when compiling Java code
+  options.compilerArgs << '-Xlint:deprecation'
+}
+javadoc {
+  failOnError = false
+}
+test {
+  jvmArgs = [
+    '-XX:+TieredCompilation',
+    '-XX:TieredStopAtLevel=1',
+    '-Djava.security.egd=file:/dev/urandom',
+    '-XX:ReservedCodeCacheSize=120m',
+    '-Dspring.main.lazy-initialization=true'
+  ]
+  // Use Junit 5 platform for unit tests
+  useJUnitPlatform()
+  testLogging {
+    events "skipped", "failed", "standard_error"
+  }
+}
+// Java-library plugin - end
+
+
+// SonarLint
+sonarlint {
+  // rules are described here: https://rules.sonarsource.com/java/
+  excludeRules = [
+    // Methods should not have too many parameters
+    'java:S107',
+    // Inheritance tree of classes should not be too deep
+    'java:S110',
+    // Generic exceptions should never be thrown
+    'java:S112',
+    // Deprecated elements should have both the annotation and the Javadoc tag
+    'java:S1123',
+    // Deprecated code should be removed, deprecated classes is warned by Java already
+    'java:S1133',
+    // for now disabable TODO warnings
+    'java:S1135',
+    // Strings should not be concatenated using '+' in a loop
+    'java:S1643',
+    // do not require the JUnit test methods to have default visability
+    'java:S5786',
+    // mostly it is Entity classes that gets this warning and the base class equals is safe since it will type check.
+    'java:S2160',
+    // same as spotbugs USBR_UNNECESSARY_STORE_BEFORE_RETURN. Can be easier to debug with this.
+    'java:S1488'
+  ]
+  includeRules = [
+    // Members of Spring components should be injected
+    'java:S3749',
+    // Spring "@Controller" classes should not use "@Scope"
+    'java:S3750',
+    // incude Spring specific rule, component is not reachable by @ComponentsScan
+    'java:S4605',
+    // Spring components should use constructor injection
+    'java:S4288'
+  ]
+  dependencies {
+    //sonarlintPlugins 'com.sonarsource.secrets:sonar-secrets-plugin:1.1.0.36766'
+    sonarlintPlugins 'org.sonarsource.java:sonar-java-plugin:7.8.1.28740'
+    sonarlintPlugins 'org.sonarsource.xml:sonar-xml-plugin:2.5.0.3376'
+  }
+  showIssues = false
+}
+sonarlintMain {
+  reports {
+    html.enabled = true
+  }
+}
+sonarlintTest {
+  reports {
+    html.enabled = true
+  }
+}
+
+// Spotbugs
+spotbugsMain {
+  effort = 'less' // 'default', 'less' or 'max'
+  excludeFilter = ResourceLoader.loadAsFile(project, '/plugin-config/spotbugs/exclude.xml')
+  ignoreFailures = false
+  showStackTraces = false
+  dependencies {
+    // http://find-sec-bugs.github.io
+    spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.12.0'
+    spotbugsPlugins 'com.mebigfatguy.sb-contrib:sb-contrib:7.4.7'
+    spotbugs 'com.github.spotbugs:spotbugs:4.7.1'
+  }
+  reports {
+    xml.enabled = true
+    html.enabled = true
+  }
+}
+spotbugsTest {
+  enabled = false
+}
+
+
+// Spotless
+spotless {
+  ratchetFrom = 'origin/main'
+  java {
+    eclipse('4.21.0').configFile(ResourceLoader.loadAsFile(project,
+      '/plugin-config/spotless/code-formating-profile-for-eclipse-formatting-engine-1.0.xml'))
+  }
+}
+

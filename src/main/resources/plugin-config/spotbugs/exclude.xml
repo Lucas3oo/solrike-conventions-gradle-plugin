@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+
+  <!-- EI: May expose internal representation by returning reference to mutable object -->
+  <BugPattern name="EI_EXPOSE_REP" />
+  <!-- EI2: May expose internal representation by incorporating reference to mutable object -->
+  <BugPattern name="EI_EXPOSE_REP2" />
+  <!-- Constrained method converts checked exception to unchecked -->
+  <BugPattern name="EXS_EXCEPTION_SOFTENING_NO_CHECKED" />
+  <!-- Unconstrained method converts checked exception to unchecked -->
+  <BugPattern name="EXS_EXCEPTION_SOFTENING_NO_CONSTRAINTS" />
+  <Match>
+    <!-- Blob field in JPA entity classes are OK. -->
+    <Bug pattern="SE_BAD_FIELD" />
+    <Field type="java.sql.Blob" />
+  </Match>
+  <!-- Not a big deal if equals is used on enums instead of == -->
+  <BugPattern name="SPP_EQUALS_ON_ENUM" />
+  <!-- It can be easier to debug code with an extra local variable -->
+  <BugPattern name="USBR_UNNECESSARY_STORE_BEFORE_RETURN" />
+
+</FindBugsFilter>
