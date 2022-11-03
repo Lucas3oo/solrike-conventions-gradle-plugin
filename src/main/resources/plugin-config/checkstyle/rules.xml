@@ -1,21 +1,24 @@
 <?xml version="1.0"?>
-<!DOCTYPE module PUBLIC
-          "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
-          "https://checkstyle.org/dtds/configuration_1_3.dtd">
+<!DOCTYPE module PUBLIC "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN" "https://checkstyle.org/dtds/configuration_1_3.dtd">
 
 <!-- https://github.com/checkstyle/checkstyle -->
 
 <module name="Checker">
   <module name="SuppressionFilter">
-    <property name="file"
-      value="${config_loc}/suppressions.xml" />
-    <property name="optional" value="true"/>
+    <property name="file" value="${config_loc}/suppressions.xml" />
+    <property name="optional" value="true" />
   </module>
   <property name="charset" value="UTF-8" />
 
   <property name="severity" value="warning" />
 
   <property name="fileExtensions" value="java,properties,xml,json" />
+
+  <module name="SuppressionSingleFilter">
+    <metadata name="comment" value="Suppress MemberName on JPA entity classes assuming those are in a package with name 'model'." />
+    <property name="checks" value="MemberName" />
+    <property name="files" value=".*model.*.java" />
+  </module>
 
   <!-- add support for // CHECKSTYLE:OFF // CHECKSTYLE:ON  in plain text files-->
   <module name="SuppressWithPlainTextCommentFilter" />
@@ -24,10 +27,10 @@
     <property name="max" value="2400" />
   </module>
 
-  <module name="UniqueProperties"/>
+  <module name="UniqueProperties" />
 
   <!-- Checks that property files contain the same keys. -->
-  <module name="Translation"/>
+  <module name="Translation" />
 
   <!-- Checks for whitespace -->
   <!-- See http://checkstyle.sf.net/config_whitespace.html -->
@@ -42,16 +45,15 @@
   <!-- Use proper logger instead. Use java.util.concurrent.Executor or @Async
     or @EnableScheduling instead. -->
   <module name="RegexpSingleline">
-    <property name="format"
-      value="System.exit\(|System.out.println\(|System.err.println\(|printStackTrace\(|new Thread\(" />
+    <property name="format" value="System.exit\(|System.out.println\(|System.err.println\(|printStackTrace\(|new Thread\(" />
   </module>
 
   <module name="LineLength">
     <property name="max" value="120" />
     <property name="fileExtensions" value="java,xml" />
-    <property name="ignorePattern"
-      value="^package.*|^import.*|a href|href|http://|https://|ftp://" />
+    <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://" />
   </module>
+
 
 
   <module name="TreeWalker">
@@ -59,8 +61,7 @@
     <module name="SuppressionCommentFilter" />
 
     <module name="IllegalImport">
-      <property name="illegalClasses"
-        value="org\.junit\.Test, org\.junit\.Assert.*, sun\.*" />
+      <property name="illegalClasses" value="org\.junit\.Test, org\.junit\.Assert.*, sun\.*" />
       <property name="regexp" value="true" />
     </module>
 
@@ -72,26 +73,17 @@
     <!-- Checks for Naming Conventions. -->
     <!-- See https://checkstyle.org/config_naming.html -->
     <module name="ConstantName">
-      <property name="format"
-        value="^s[A-Z][a-z0-9][a-zA-Z0-9]*$|^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$" />
-      <message key="name.invalidPattern"
-        value="Constant name ''{0}'' must match pattern ''{1}''." />
+      <property name="format" value="^s[A-Z][a-z0-9][a-zA-Z0-9]*$|^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$" />
+      <message key="name.invalidPattern" value="Constant name ''{0}'' must match pattern ''{1}''." />
     </module>
-    <!--
     <module name="MemberName">
-      <property name="format"
-        value="^m[A-Z][a-z0-9][a-zA-Z0-9]*$" />
-      <message key="name.invalidPattern"
-        value="Member name ''{0}'' must match pattern ''{1}''." />
+      <property name="format" value="^m[A-Z][a-z0-9][a-zA-Z0-9]*$" />
+      <message key="name.invalidPattern" value="Member name ''{0}'' must match pattern ''{1}''." />
     </module>
-    -->
     <module name="StaticVariableName">
-      <property name="format"
-        value="^s[A-Z][a-z0-9][a-zA-Z0-9]*$" />
-      <message key="name.invalidPattern"
-        value="Static variable name ''{0}'' must match pattern ''{1}''." />
+      <property name="format" value="^s[A-Z][a-z0-9][a-zA-Z0-9]*$" />
+      <message key="name.invalidPattern" value="Static variable name ''{0}'' must match pattern ''{1}''." />
     </module>
-
 
     <module name="LocalFinalVariableName" />
     <module name="LocalVariableName" />
@@ -99,7 +91,7 @@
     <module name="PackageName" />
     <module name="ParameterName" />
 
-    <module name="TrailingComment"/>
+    <module name="TrailingComment" />
     <module name="TypeName" />
 
     <module name="AbbreviationAsWordInName">
@@ -130,13 +122,11 @@
     <module name="EmptyStatement" />
     <module name="EqualsHashCode" />
     <module name="IllegalCatch">
-      <property name="illegalClassNames"
-        value="Throwable,java.lang.Throwable" />
+      <property name="illegalClassNames" value="Throwable,java.lang.Throwable" />
     </module>
     <module name="IllegalInstantiation" />
     <module name="IllegalThrows">
-      <property name="illegalClassNames"
-        value="NullPointerException" />
+      <property name="illegalClassNames" value="NullPointerException,java.lang.NullPointerException" />
     </module>
     <module name="IllegalType" />
     <module name="InnerAssignment" />

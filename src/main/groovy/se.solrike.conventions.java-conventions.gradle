@@ -2,16 +2,15 @@ import org.gradle.api.tasks.compile.JavaCompile
 
 import se.solrike.conventions.utils.ResourceLoader
 
-// Define Java conventions for Solrike
+// Define Java conventions for typical Java project
 
 plugins {
   // built in plugins
   id 'checkstyle'
   id 'jacoco'
   id 'java'
-
-  // https://github.com/diffplug/spotless/tree/main/plugin-gradle
-  id 'com.diffplug.spotless'
+  // third party
+  id 'com.diffplug.spotless' // https://github.com/diffplug/spotless/tree/main/plugin-gradle
   id 'com.github.spotbugs'
   id 'org.owasp.dependencycheck'
   id 'se.solrike.sonarlint'
@@ -21,7 +20,6 @@ plugins {
 repositories {
   mavenCentral()
 }
-
 
 
 /////// PLUGINS /////////
