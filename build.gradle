@@ -1,6 +1,7 @@
 plugins {
   id 'com.gradle.plugin-publish' version '0.20.0'  // plugin publication
-  id 'groovy-gradle-plugin'
+  id 'groovy'
+  id 'java-gradle-plugin'
   id 'maven-publish' // generate the publication metadata
 }
 
@@ -11,10 +12,11 @@ repositories {
 
 dependencies {
   // versions for the plugins are controlled here
+  // Alt way to ref is <plugin id>:<plugin id>.gradle.plugin:<version>.
   implementation 'com.diffplug.spotless:spotless-plugin-gradle:6.11.0'
   implementation 'com.github.spotbugs.snom:spotbugs-gradle-plugin:5.0.13'
   implementation 'org.owasp:dependency-check-gradle:7.3.0'
-  implementation 'se.solrike.sonarlint:sonarlint-gradle-plugin:1.0.0-beta.6'
+  implementation 'se.solrike.sonarlint:se.solrike.sonarlint.gradle.plugin:1.0.0-beta.6'
 }
 
 group = 'se.solrike.conventions'
@@ -27,7 +29,32 @@ tasks.withType(GroovyCompile) {
     options.compilerArgs << '-Xlint:deprecation' << '-Xlint:unchecked'
   }
 }
+sourceSets {
+  main {
+    java {
+      srcDirs = [] // don't compile Java code twice
+    }
+    groovy {
+      srcDirs = [
+        'src/main/groovy',
+        'src/main/java'
+      ]
+    }
+  }
+  test {
+    java {
+      srcDirs = [] // don't compile Java code twice
+    }
+    groovy {
+      srcDirs = ['src/test/groovy']
+    }
+  }
+}
+
 javadoc {
+  enabled = false
+}
+groovydoc {
   enabled = false
 }
 
@@ -36,7 +63,7 @@ gradlePlugin {
   plugins {
     javaConventionsPlugin {
       id = group + '.java-conventions'
-      implementationClass = 'SeSolrikeConventionsJavaConventionsPlugin'
+      implementationClass = 'se.solrike.conventions.JavaConventionsPlugin'
     }
   }
 }
@@ -55,7 +82,7 @@ pluginBundle {
       description = 'Convention configuration of Checkstyle, Dependency check, Jacoco, ' +
         'Java, Sonarlint, Spotbugs, Spotless plugins.'
       displayName = 'Java conventions plugin'
-      tags = ['gradle', 'conventions', 'checkstyle', 'dependencycheck', 'jacoco', 'java', 'sonarlint',
+      tags = ['conventions', 'checkstyle', 'dependencycheck', 'jacoco', 'java', 'sonarlint',
         'spotbugs', 'spotless']
     }
   }

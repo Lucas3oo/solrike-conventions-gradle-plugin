@@ -1,5 +1,7 @@
 # solrike-conventions-gradle-plugin
-Gradle convention plugins for Java projects. A Gradle convention plugin is like setting new
+Gradle convention plugins for Java projects.
+
+A Gradle [convention plugin](https://docs.gradle.org/current/userguide/sharing_build_logic_between_subprojects.html#sec:convention_plugins) is like setting new
 default values on plugins. Those new default values can be easily shared between a number of projects by just
 depend on this plugin.
 
