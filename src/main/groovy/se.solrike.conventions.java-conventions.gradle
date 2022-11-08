@@ -7,6 +7,7 @@ import se.solrike.conventions.utils.ResourceLoader
 plugins {
   // built in plugins
   id 'checkstyle'
+  id 'eclipse'
   id 'jacoco'
   id 'java'
   // third party
@@ -27,7 +28,7 @@ repositories {
 // Checkstyle
 checkstyle {
   toolVersion = '10.4'
-  config = project.resources.text.fromUri(ResourceLoader.loadAsUri('/plugin-config/checkstyle/rules.xml'))
+  config = project.resources.text.fromUri(ResourceLoader.getResourceAsUri('/plugin-config/checkstyle/rules.xml'))
   ignoreFailures = false
   maxWarnings = 0
   // add all sources so that also properties files are checked
@@ -54,10 +55,31 @@ dependencyCheck {
 }
 
 
-// Java-library plugin - start
-sourceCompatibility = JavaVersion.VERSION_11
-targetCompatibility = JavaVersion.VERSION_11
+// folder names that ends with 'nosync' will not be synced to iCcloud drive.
+eclipse {
+  classpath {
+    defaultOutputDir = file('bin.nosync/main')
+    file {
+      whenMerged {
+        def src = entries.find { it.path == 'src/main/java' }
+        if (src) src.output = 'bin.nosync/main'
+        src = entries.find { it.path == 'src/main/resources' }
+        if (src) src.output = 'bin.nosync/main'
+        src = entries.find { it.path == 'src/test/java' }
+        if (src) src.output = 'bin.nosync/test'
+        src = entries.find { it.path == 'src/test/resources' }
+        if (src) src.output = 'bin.nosync/test'
+      }
+    }
+  }
+}
 
+
+// Java-library plugin - start
+java {
+  sourceCompatibility = JavaVersion.VERSION_11
+  targetCompatibility = JavaVersion.VERSION_11
+}
 tasks.withType(JavaCompile).configureEach {
   options.encoding = 'UTF-8'
   // needed for jackson deserialization using class' constructor without need for additional jackson annotations.
@@ -141,7 +163,7 @@ sonarlintTest {
 // Spotbugs
 spotbugsMain {
   effort = 'less' // 'default', 'less' or 'max'
-  excludeFilter = ResourceLoader.loadAsFile(project, '/plugin-config/spotbugs/exclude.xml')
+  excludeFilter = ResourceLoader.getResourceAsFile(project, '/plugin-config/spotbugs/exclude.xml')
   ignoreFailures = false
   showStackTraces = false
   dependencies {
@@ -163,8 +185,8 @@ spotbugsTest {
 spotless {
   ratchetFrom = 'origin/main'
   java {
-    eclipse('4.21.0').configFile(ResourceLoader.loadAsFile(project,
-      '/plugin-config/spotless/code-formating-profile-for-eclipse-formatting-engine-1.0.xml'))
+    eclipse('4.21.0').configFile(ResourceLoader.getResourceAsFile(project,
+        '/plugin-config/spotless/code-formating-profile-for-eclipse-formatting-engine-1.0.xml'))
   }
 }
 

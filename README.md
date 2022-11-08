@@ -7,6 +7,7 @@ depend on this plugin.
 
 The following plugins are applied and configured when using this plugin:
 * checkstyle
+* eclipse
 * jacoco
 * java
 * com.diffplug.spotless
@@ -22,7 +23,7 @@ Apply the plugin to your project.
 
 ```groovy
 plugins {
-  id 'se.solrike.conventions.java-conventions' version '1.0.0-beta.1'
+  id 'se.solrike.conventions.java-conventions' version '1.0.0-beta.2'
 }
 ```
 
@@ -58,6 +59,9 @@ sonarlint {
 
 
 ## Release notes
+
+### 1.0.0-beta.2
+Add eclipse plugin
 
 ### 1.0.0-beta.1
 First version with support for generic Java projects.

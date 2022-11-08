@@ -1,4 +1,5 @@
 plugins {
+  id 'eclipse'
   id 'com.gradle.plugin-publish' version '0.20.0'  // plugin publication
   id 'groovy'
   id 'java-gradle-plugin'
@@ -20,10 +21,11 @@ dependencies {
 }
 
 group = 'se.solrike.conventions'
-version = '1.0.0-beta.1'
-sourceCompatibility = '11'
-targetCompatibility = '11'
-
+version = '1.0.0-beta.2'
+java {
+  sourceCompatibility = JavaVersion.VERSION_11
+  targetCompatibility = JavaVersion.VERSION_11
+}
 tasks.withType(GroovyCompile) {
   configure(options) {
     options.compilerArgs << '-Xlint:deprecation' << '-Xlint:unchecked'
@@ -50,13 +52,31 @@ sourceSets {
     }
   }
 }
-
 javadoc {
   enabled = false
 }
 groovydoc {
   enabled = false
 }
+
+eclipse {
+  classpath {
+    defaultOutputDir = file('bin.nosync/main')
+    file {
+      whenMerged {
+        def src = entries.find { it.path == 'src/main/groovy' }
+        if (src) src.output = 'bin.nosync/main'
+        src = entries.find { it.path == 'src/main/resources' }
+        if (src) src.output = 'bin.nosync/main'
+        src = entries.find { it.path == 'src/test/groovy' }
+        if (src) src.output = 'bin.nosync/test'
+        src = entries.find { it.path == 'src/test/resources' }
+        if (src) src.output = 'bin.nosync/test'
+      }
+    }
+  }
+}
+
 
 // publish the plugin like: ./gradlew publishPlugins
 gradlePlugin {
@@ -72,15 +92,16 @@ pluginBundle {
   // These settings are set for the whole plugin bundle
   website = 'https://github.com/Lucas3oo/solrike-conventions-gradle-plugin'
   vcsUrl = website
-  description =
-      'Gradle convention plugins for Java projects. Defines for instance Checkstyle rules, ' +
-      'Spotbugs exclude filter, changes the default included and excluded Sonarlint rules and ' +
-      'formatting rules for Spotless.'
 
   plugins {
     javaConventionsPlugin {
-      description = 'Convention configuration of Checkstyle, Dependency check, Jacoco, ' +
-        'Java, Sonarlint, Spotbugs, Spotless plugins.'
+      description =
+          'Gradle convention plugins for Java projects. ' +
+          'Configures Checkstyle, Dependency check, Eclipse, Jacoco, ' +
+          'Java, Sonarlint, Spotbugs, Spotless plugins. ' +
+          'Defines for Checkstyle rules, ' +
+          'Spotbugs exclude filter, changes the default included and excluded Sonarlint rules and ' +
+          'formatting rules for Spotless. Sets the output folder in Eclipse .classpath file.'
       displayName = 'Java conventions plugin'
       tags = ['conventions', 'checkstyle', 'dependencycheck', 'jacoco', 'java', 'sonarlint',
         'spotbugs', 'spotless']

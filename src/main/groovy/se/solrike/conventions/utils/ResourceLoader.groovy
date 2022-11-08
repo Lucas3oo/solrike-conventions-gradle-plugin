@@ -7,8 +7,8 @@ import org.gradle.api.Project
  */
 class ResourceLoader {
 
-  public static String loadAsString(String name) {
-    return load(name).text
+  public static String getResourceAsString(String name) {
+    return getResource(name).text
   }
 
   /**
@@ -16,11 +16,11 @@ class ResourceLoader {
    * @param name
    * @return  e.g. jar:file:/some-path/myjar.jar!/path-inside-jar/the-file.xml
    */
-  public static URI loadAsUri(String name) {
-    return load(name).toURI()
+  public static URI getResourceAsUri(String name) {
+    return getResource(name).toURI()
   }
 
-  public static URL load(String name) {
+  public static URL getResource(String name) {
     return ResourceLoader.class.getResource(name)
   }
 
@@ -31,8 +31,8 @@ class ResourceLoader {
    * @param name
    * @return the file
    */
-  public static File loadAsFile(Project project, String name) {
-    File file = project.file(project.resources.text.fromUri(loadAsUri(name)))
+  public static File getResourceAsFile(Project project, String name) {
+    File file = project.file(project.resources.text.fromUri(getResourceAsUri(name)))
     // change file file type ending from the generated .txt to what the resource has
     String fileType = name.substring(name.lastIndexOf('.'))
     String newFileName = file.absolutePath + fileType
