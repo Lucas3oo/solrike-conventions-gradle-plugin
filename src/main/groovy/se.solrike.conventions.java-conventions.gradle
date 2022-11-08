@@ -1,3 +1,4 @@
+
 import org.gradle.api.tasks.compile.JavaCompile
 
 import se.solrike.conventions.utils.ResourceLoader

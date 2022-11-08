@@ -1,8 +1,9 @@
 plugins {
-  id 'com.gradle.plugin-publish' version '0.20.0'  // plugin publication
   id 'eclipse'
+
+  // https://plugins.gradle.org/docs/publish-plugin
+  id 'com.gradle.plugin-publish' version '1.0.0' // plugin publication, and java-gradle-plugin and maven-punlish plugins
   id 'groovy-gradle-plugin'
-  id 'maven-publish' // generate the publication metadata
 }
 
 repositories {
@@ -17,6 +18,11 @@ dependencies {
   implementation 'com.github.spotbugs.snom:spotbugs-gradle-plugin:5.0.13'
   implementation 'org.owasp:dependency-check-gradle:7.3.0'
   implementation 'se.solrike.sonarlint:se.solrike.sonarlint.gradle.plugin:1.0.0-beta.6'
+
+  testImplementation('org.assertj:assertj-core:3.22.0')
+  testImplementation('org.junit.jupiter:junit-jupiter')
+  testImplementation(platform('org.junit:junit-bom:5.8.2'))
+
 }
 
 group = 'se.solrike.conventions'
@@ -25,35 +31,10 @@ java {
   sourceCompatibility = JavaVersion.VERSION_11
   targetCompatibility = JavaVersion.VERSION_11
 }
-tasks.withType(GroovyCompile) {
-  configure(options) {
-    options.compilerArgs << '-Xlint:deprecation' << '-Xlint:unchecked'
-  }
-}
-sourceSets {
-  main {
-    java {
-      srcDirs = [] // don't compile Java code twice
-    }
-    groovy {
-      srcDirs = [
-        'src/main/groovy',
-        'src/main/java'
-      ]
-    }
-  }
-  test {
-    java {
-      srcDirs = [] // don't compile Java code twice
-    }
-    groovy {
-      srcDirs = ['src/test/groovy']
-    }
-  }
-}
 javadoc {
   enabled = false
 }
+
 
 eclipse {
   classpath {
@@ -68,6 +49,8 @@ eclipse {
         if (src) src.output = 'bin.nosync/test'
         src = entries.find { it.path == 'src/test/resources' }
         if (src) src.output = 'bin.nosync/test'
+        src = entries.find { it.path == 'adapter-src' }
+        if (src) src.output = 'bin.nosync/main'
       }
     }
   }
@@ -79,8 +62,16 @@ gradlePlugin {
   plugins {
     javaConventionsPlugin {
       id = group + '.java-conventions'
-      // the clas sis a generated adpater class when using the groovy-gradle-plugin plugin
+      // the class is a generated adapter class when using the groovy-gradle-plugin plugin
       implementationClass = 'SeSolrikeConventionsJavaConventionsPlugin'
+      description =
+          'Gradle convention plugins for Java projects. ' +
+          'Configures Checkstyle, Dependency check, Eclipse, Jacoco, ' +
+          'Java, Sonarlint, Spotbugs, Spotless plugins. ' +
+          'Defines for Checkstyle rules, ' +
+          'Spotbugs exclude filter, changes the default included and excluded Sonarlint rules and ' +
+          'formatting rules for Spotless. Sets the output folder in Eclipse .classpath file.'
+      displayName = 'Java conventions plugin for solrike.se'
     }
   }
 }
@@ -90,20 +81,10 @@ pluginBundle {
   website = 'https://github.com/Lucas3oo/solrike-conventions-gradle-plugin'
   vcsUrl = website
 
-  plugins {
-    javaConventionsPlugin {
-      description =
-          'Gradle convention plugins for Java projects. ' +
-          'Configures Checkstyle, Dependency check, Eclipse, Jacoco, ' +
-          'Java, Sonarlint, Spotbugs, Spotless plugins. ' +
-          'Defines for Checkstyle rules, ' +
-          'Spotbugs exclude filter, changes the default included and excluded Sonarlint rules and ' +
-          'formatting rules for Spotless. Sets the output folder in Eclipse .classpath file.'
-      displayName = 'Java conventions plugin'
-      tags = ['conventions', 'checkstyle', 'dependencycheck', 'jacoco', 'java', 'sonarlint',
+  pluginTags = [
+    javaConventionsPlugin: ['conventions', 'checkstyle', 'dependencycheck', 'eclipse', 'jacoco', 'java', 'sonarlint',
         'spotbugs', 'spotless']
-    }
-  }
+  ]
 }
 
 // Run ./gradlew wrapper
