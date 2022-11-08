@@ -22,7 +22,6 @@ repositories {
   mavenCentral()
 }
 
-
 /////// PLUGINS /////////
 
 // Checkstyle

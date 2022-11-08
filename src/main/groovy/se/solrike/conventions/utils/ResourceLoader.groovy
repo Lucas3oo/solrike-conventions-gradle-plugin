@@ -8,7 +8,7 @@ import org.gradle.api.Project
 class ResourceLoader {
 
   public static String getResourceAsString(String name) {
-    return getResource(name).text
+    return getResourceAsUrl(name).text
   }
 
   /**
@@ -17,10 +17,10 @@ class ResourceLoader {
    * @return  e.g. jar:file:/some-path/myjar.jar!/path-inside-jar/the-file.xml
    */
   public static URI getResourceAsUri(String name) {
-    return getResource(name).toURI()
+    return getResourceAsUrl(name).toURI()
   }
 
-  public static URL getResource(String name) {
+  public static URL getResourceAsUrl(String name) {
     return ResourceLoader.class.getResource(name)
   }
 

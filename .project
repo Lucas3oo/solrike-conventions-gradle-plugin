@@ -21,4 +21,11 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.buildship.core.gradleprojectnature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>adapter-src</name>
+			<type>2</type>
+			<location>/Users/lpersson/.build/gradle/solrike-conventions-gradle-plugin/solrike-conventions-gradle-plugin/groovy-dsl-plugins/output/adapter-src</location>
+		</link>
+	</linkedResources>
 </projectDescription>

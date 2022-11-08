@@ -1,8 +1,7 @@
 plugins {
-  id 'eclipse'
   id 'com.gradle.plugin-publish' version '0.20.0'  // plugin publication
-  id 'groovy'
-  id 'java-gradle-plugin'
+  id 'eclipse'
+  id 'groovy-gradle-plugin'
   id 'maven-publish' // generate the publication metadata
 }
 
@@ -55,9 +54,6 @@ sourceSets {
 javadoc {
   enabled = false
 }
-groovydoc {
-  enabled = false
-}
 
 eclipse {
   classpath {
@@ -83,7 +79,8 @@ gradlePlugin {
   plugins {
     javaConventionsPlugin {
       id = group + '.java-conventions'
-      implementationClass = 'se.solrike.conventions.JavaConventionsPlugin'
+      // the clas sis a generated adpater class when using the groovy-gradle-plugin plugin
+      implementationClass = 'SeSolrikeConventionsJavaConventionsPlugin'
     }
   }
 }

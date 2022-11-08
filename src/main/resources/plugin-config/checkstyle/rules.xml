@@ -17,10 +17,11 @@
   <module name="SuppressionSingleFilter">
     <metadata name="comment" value="Suppress MemberName on JPA entity classes assuming those are in a package with name 'model'." />
     <property name="checks" value="MemberName" />
-    <property name="files" value=".*model.*.java" />
+    <property name="files" value=".*model.*\.java|.*Entity\.java" />
   </module>
 
-  <!-- add support for // CHECKSTYLE:OFF // CHECKSTYLE:ON  in plain text files-->
+
+  <!-- add support for '// CHECKSTYLE:OFF' and '// CHECKSTYLE:ON'  in plain text files-->
   <module name="SuppressWithPlainTextCommentFilter" />
 
   <module name="FileLength">
@@ -57,7 +58,7 @@
 
 
   <module name="TreeWalker">
-    <!-- add support for //CHECKSTYLE:OFF //CHECKSTYLE:ON -->
+    <!-- add support for '// CHECKSTYLE:OFF' and '// CHECKSTYLE:ON' -->
     <module name="SuppressionCommentFilter" />
 
     <module name="IllegalImport">

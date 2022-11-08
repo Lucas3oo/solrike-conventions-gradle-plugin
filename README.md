@@ -61,7 +61,7 @@ sonarlint {
 ## Release notes
 
 ### 1.0.0-beta.2
-Add eclipse plugin
+Add eclipse plugin.
 
 ### 1.0.0-beta.1
 First version with support for generic Java projects.
