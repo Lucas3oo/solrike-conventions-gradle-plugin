@@ -63,34 +63,6 @@ eclipse {
   }
 }
 
-class Name implements Named {
-  String name
-  Name(String name) {
-    this.name = name
-  }
-}
-
-task ce {
-  doLast {
-    def plugins = ((GradlePluginDevelopmentExtension)getProject().getExtensions().getByType(GradlePluginDevelopmentExtension.class)).getPlugins()
-    plugins.each {
-      println "$it.id $it.name $it.implementationClass $it.displayName $it.description"
-    }
-
-    def ex = getProject().getExtensions().getByType(GradlePluginDevelopmentExtension.class)
-    ex.getPlugins().remove(new Name('se.solrike.conventions.java-conventions'))
-
-    println '*******'
-
-    plugins = ((GradlePluginDevelopmentExtension)getProject().getExtensions().getByType(GradlePluginDevelopmentExtension.class)).getPlugins()
-    plugins.each {
-      println "$it.id $it.name $it.implementationClass $it.displayName $it.description"
-    }
-
-  }
-}
-
-
 // publish the plugin like: ./gradlew publishPlugins
 gradlePlugin {
   plugins {
@@ -119,6 +91,13 @@ pluginBundle {
     javaConventionsPlugin: ['conventions', 'checkstyle', 'dependencycheck', 'eclipse', 'jacoco', 'java', 'sonarlint',
         'spotbugs', 'spotless']
   ]
+}
+
+class Name implements Named {
+  String name
+  Name(String name) {
+    this.name = name
+  }
 }
 
 task configureGradlePluginDev {
