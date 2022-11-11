@@ -27,6 +27,7 @@ dependencies {
 
 group = 'se.solrike.conventions'
 version = '1.0.0-beta.2'
+def pluginId =  group + '.java-conventions'
 java {
   sourceCompatibility = JavaVersion.VERSION_11
   targetCompatibility = JavaVersion.VERSION_11
@@ -67,7 +68,7 @@ eclipse {
 gradlePlugin {
   plugins {
     javaConventionsPlugin {
-      id = group + '.java-conventions'
+      id = pluginId
       // the class is a generated adapter class when using the groovy-gradle-plugin plugin
       implementationClass = 'SeSolrikeConventionsJavaConventionsPlugin'
       description =
@@ -86,7 +87,6 @@ pluginBundle {
   // These settings are set for the whole plugin bundle
   website = 'https://github.com/Lucas3oo/solrike-conventions-gradle-plugin'
   vcsUrl = website
-
   pluginTags = [
     javaConventionsPlugin: ['conventions', 'checkstyle', 'dependencycheck', 'eclipse', 'jacoco', 'java', 'sonarlint',
         'spotbugs', 'spotless']
@@ -105,7 +105,7 @@ task configureGradlePluginDev {
   // and java-gradle-plugin are used
   doLast {
     def ex = getProject().getExtensions().getByType(GradlePluginDevelopmentExtension.class)
-    ex.getPlugins().remove(new Name('se.solrike.conventions.java-conventions'))
+    ex.getPlugins().remove(new Name(pluginId))
   }
 }
 tasks.publishPlugins.dependsOn(configureGradlePluginDev)
