@@ -22,10 +22,10 @@
 		<nature>org.eclipse.buildship.core.gradleprojectnature</nature>
 	</natures>
 	<linkedResources>
-		<link>
-			<name>adapter-src</name>
-			<type>2</type>
-			<location>/Users/lpersson/.build/gradle/solrike-conventions-gradle-plugin/solrike-conventions-gradle-plugin/groovy-dsl-plugins/output/adapter-src</location>
-		</link>
+        <link>
+            <name>adapter-src</name>
+            <type>2</type>
+            <locationURI>GRADLE_BUILD_HOME/solrike-conventions-gradle-plugin/solrike-conventions-gradle-plugin/groovy-dsl-plugins/output/adapter-src</locationURI>
+        </link>
 	</linkedResources>
 </projectDescription>

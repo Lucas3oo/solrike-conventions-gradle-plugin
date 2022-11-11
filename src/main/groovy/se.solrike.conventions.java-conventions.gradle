@@ -55,7 +55,8 @@ dependencyCheck {
 }
 
 
-// folder names that ends with 'nosync' will not be synced to iCcloud drive.
+// folder names that ends with 'nosync' will not be synced to iCloud drive.
+// folder names that ends with 'nosync' will not be synced to iCloud drive.
 eclipse {
   classpath {
     defaultOutputDir = file('bin.nosync/main')
@@ -65,9 +66,13 @@ eclipse {
         if (src) src.output = 'bin.nosync/main'
         src = entries.find { it.path == 'src/main/resources' }
         if (src) src.output = 'bin.nosync/main'
+        src = entries.find { it.path == '.apt_generated' }
+        if (src) src.output = 'bin.nosync/main'
         src = entries.find { it.path == 'src/test/java' }
         if (src) src.output = 'bin.nosync/test'
         src = entries.find { it.path == 'src/test/resources' }
+        if (src) src.output = 'bin.nosync/test'
+        src = entries.find { it.path == '.apt_generated_tests' }
         if (src) src.output = 'bin.nosync/test'
       }
     }
