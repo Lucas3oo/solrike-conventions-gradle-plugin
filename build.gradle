@@ -2,7 +2,7 @@ plugins {
   id 'eclipse'
 
   // https://plugins.gradle.org/docs/publish-plugin
-  id 'com.gradle.plugin-publish' version '1.0.0' // plugin publication, and java-gradle-plugin and maven-punlish plugins
+  id 'com.gradle.plugin-publish' version '1.0.0' // plugin publication, and java-gradle-plugin and maven-publish plugins
   id 'groovy-gradle-plugin'
 }
 
