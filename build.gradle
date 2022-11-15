@@ -22,12 +22,10 @@ dependencies {
   testImplementation('org.assertj:assertj-core:3.22.0')
   testImplementation('org.junit.jupiter:junit-jupiter')
   testImplementation(platform('org.junit:junit-bom:5.8.2'))
-
 }
 
 group = 'se.solrike.conventions'
 version = '1.0.0-beta.2'
-def pluginId =  group + '.java-conventions'
 java {
   sourceCompatibility = JavaVersion.VERSION_11
   targetCompatibility = JavaVersion.VERSION_11
@@ -38,7 +36,7 @@ javadoc {
 
 tasks.withType(GroovyCompile) {
   configure(options) {
-      options.compilerArgs << '-Xlint:deprecation' << '-Xlint:unchecked'
+    options.compilerArgs << '-Xlint:deprecation' << '-Xlint:unchecked'
   }
 }
 
@@ -67,15 +65,12 @@ eclipse {
 // publish the plugin like: ./gradlew publishPlugins
 gradlePlugin {
   plugins {
-    javaConventionsPlugin {
-      id = pluginId
-      // the class is a generated adapter class when using the groovy-gradle-plugin plugin
-      implementationClass = 'SeSolrikeConventionsJavaConventionsPlugin'
+    matching { it.name == 'se.solrike.conventions.java-conventions' }.configureEach {
       description =
           'Gradle convention plugins for Java projects. ' +
           'Configures Checkstyle, Dependency check, Eclipse, Jacoco, ' +
           'Java, Sonarlint, Spotbugs, Spotless plugins. ' +
-          'Defines for Checkstyle rules, ' +
+          'Defines for instance Checkstyle rules, ' +
           'Spotbugs exclude filter, changes the default included and excluded Sonarlint rules and ' +
           'formatting rules for Spotless. Sets the output folder in Eclipse .classpath file.'
       displayName = 'Java conventions plugin for solrike.se'
@@ -88,27 +83,19 @@ pluginBundle {
   website = 'https://github.com/Lucas3oo/solrike-conventions-gradle-plugin'
   vcsUrl = website
   pluginTags = [
-    javaConventionsPlugin: ['conventions', 'checkstyle', 'dependencycheck', 'eclipse', 'jacoco', 'java', 'sonarlint',
-        'spotbugs', 'spotless']
+   'se.solrike.conventions.java-conventions': [
+      'conventions',
+      'checkstyle',
+      'dependencycheck',
+      'eclipse',
+      'jacoco',
+      'java',
+      'sonarlint',
+      'spotbugs',
+      'spotless'
+    ]
   ]
 }
-
-class Name implements Named {
-  String name
-  Name(String name) {
-    this.name = name
-  }
-}
-
-task configureGradlePluginDev {
-  // remove the extra plugin description that gets generated I think due to both groovy-gradle-plugin
-  // and java-gradle-plugin are used
-  doLast {
-    def ex = getProject().getExtensions().getByType(GradlePluginDevelopmentExtension.class)
-    ex.getPlugins().remove(new Name(pluginId))
-  }
-}
-tasks.publishPlugins.dependsOn(configureGradlePluginDev)
 
 // Run ./gradlew wrapper
 wrapper {
