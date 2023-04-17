@@ -54,31 +54,25 @@ dependencyCheck {
   }
 }
 
-
-// folder names that ends with 'nosync' will not be synced to iCloud drive.
 // folder names that ends with 'nosync' will not be synced to iCloud drive.
 eclipse {
   classpath {
-    defaultOutputDir = file('bin.nosync/main')
+    def mainOutputDir = 'bin.nosync/main'
+    defaultOutputDir = file(mainOutputDir)
     file {
       whenMerged {
-        def src = entries.find { it.path == 'src/main/java' }
-        if (src) src.output = 'bin.nosync/main'
-        src = entries.find { it.path == 'src/main/resources' }
-        if (src) src.output = 'bin.nosync/main'
-        src = entries.find { it.path == '.apt_generated' }
-        if (src) src.output = 'bin.nosync/main'
-        src = entries.find { it.path == 'src/test/java' }
-        if (src) src.output = 'bin.nosync/test'
-        src = entries.find { it.path == 'src/test/resources' }
-        if (src) src.output = 'bin.nosync/test'
-        src = entries.find { it.path == '.apt_generated_tests' }
-        if (src) src.output = 'bin.nosync/test'
+        entries.findAll({it.kind == 'src'}).each {
+          if (it.path.contains('main') || it.path == '.apt_generated') {
+            it.output = mainOutputDir
+          }
+          else if (it.path.contains('test')) {
+            it.output = 'bin.nosync/test'
+          }
+        }
       }
     }
   }
 }
-
 
 // Java-library plugin - start
 java {
@@ -149,8 +143,8 @@ sonarlint {
   ]
   dependencies {
     //sonarlintPlugins 'com.sonarsource.secrets:sonar-secrets-plugin:1.1.0.36766'
-    sonarlintPlugins 'org.sonarsource.java:sonar-java-plugin:7.8.1.28740'
-    sonarlintPlugins 'org.sonarsource.xml:sonar-xml-plugin:2.5.0.3376'
+    sonarlintPlugins 'org.sonarsource.java:sonar-java-plugin:7.17.0.31219'
+    sonarlintPlugins 'org.sonarsource.xml:sonar-xml-plugin:2.6.1.3686'
   }
   showIssues = false
 }
@@ -175,7 +169,7 @@ spotbugsMain {
     // http://find-sec-bugs.github.io
     spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.12.0'
     spotbugsPlugins 'com.mebigfatguy.sb-contrib:sb-contrib:7.4.7'
-    spotbugs 'com.github.spotbugs:spotbugs:4.7.1'
+    spotbugs 'com.github.spotbugs:spotbugs:4.7.3'
   }
   reports {
     xml.enabled = true
