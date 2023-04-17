@@ -26,7 +26,7 @@ Apply the plugin to your project.
 
 ```groovy
 plugins {
-  id 'se.solrike.conventions.java-conventions' version '1.0.0-beta.2'
+  id 'se.solrike.conventions.java-conventions' version '1.0.0-beta.3'
 }
 ```
 
@@ -51,10 +51,10 @@ To configure plugins for the SonarLint plugin:
 sonarlint {
   dependencies {
     sonarlintPlugins 'org.sonarsource.html:sonar-html-plugin:3.6.0.3106'
-    sonarlintPlugins 'org.sonarsource.java:sonar-java-plugin:7.8.1.28740'
+    sonarlintPlugins 'org.sonarsource.java:sonar-java-plugin:7.17.0.31219'
     sonarlintPlugins 'org.sonarsource.javascript:sonar-javascript-plugin:8.8.0.17228' // both JS and TS
     sonarlintPlugins 'org.sonarsource.typescript:sonar-typescript-plugin:2.1.0.4359'
-    sonarlintPlugins 'org.sonarsource.xml:sonar-xml-plugin:2.5.0.3376'
+    sonarlintPlugins 'org.sonarsource.xml:sonar-xml-plugin:2.6.1.3686'
     // include a plugin not in Maven repo
     sonarlintPlugins files("${System.getProperty('user.home')}/.p2/pool/plugins/org.sonarlint.eclipse.core_7.2.1.42550/plugins/sonar-secrets-plugin-1.1.0.36766.jar")
   }
@@ -63,6 +63,8 @@ sonarlint {
 
 
 ## Release notes
+### 1.0.0-beta.3
+Update versions on plugins and adding a util class for build numbers.
 
 ### 1.0.0-beta.2
 Add eclipse plugin.
