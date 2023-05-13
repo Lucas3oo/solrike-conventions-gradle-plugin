@@ -26,7 +26,7 @@ Apply the plugin to your project.
 
 ```groovy
 plugins {
-  id 'se.solrike.conventions.java-conventions' version '1.0.0-beta.4'
+  id 'se.solrike.conventions.java-conventions' version '1.0.0-beta.5'
 }
 ```
 
@@ -63,7 +63,7 @@ sonarlint {
 
 
 ## Release notes
-### 1.0.0-beta.4
+### 1.0.0-beta.5
 Enable SARIF format for the reports from Checkstyle, Sonarlint, Sprotbugs and OWASP Dependency Check so that
 modern CI:s like Github actions and AWS CodeCatalyst can display issues using their standard support.
 
