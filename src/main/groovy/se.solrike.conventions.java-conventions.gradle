@@ -25,7 +25,7 @@ repositories {
 
 /////// PLUGINS /////////
 
-// Checkstyle
+// Checkstyle - start
 checkstyle {
   toolVersion = '10.4'
   config = project.resources.text.fromUri(ResourceLoader.getResourceAsUri('/plugin-config/checkstyle/rules.xml'))
@@ -39,6 +39,12 @@ checkstyle {
     // checkstyle 'groupId:artifactId:version'
   }
 }
+tasks.withType(Checkstyle) {
+  reports {
+      sarif.required = true
+  }
+}
+// Checkstyle - end
 
 // run ./gradlew dependencyCheckAggregate
 dependencyCheck {
@@ -151,11 +157,12 @@ sonarlint {
 sonarlintMain {
   reports {
     html.enabled = true
+    sarif.enabled = true
   }
 }
 sonarlintTest {
   reports {
-    html.enabled = true
+    sarif.enabled = true
   }
 }
 
@@ -172,7 +179,7 @@ spotbugsMain {
     spotbugs 'com.github.spotbugs:spotbugs:4.7.3'
   }
   reports {
-    xml.enabled = true
+    sarif.enabled = true
     html.enabled = true
   }
 }
