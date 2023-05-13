@@ -1,5 +1,6 @@
 
 import org.gradle.api.tasks.compile.JavaCompile
+import org.gradle.util.GradleVersion
 
 import se.solrike.conventions.utils.ResourceLoader
 
@@ -41,7 +42,9 @@ checkstyle {
 }
 tasks.withType(Checkstyle) {
   reports {
+    if (GradleVersion.current() >= GradleVersion.version("8.1.1")) {
       sarif.required = true
+    }
   }
 }
 // Checkstyle - end
