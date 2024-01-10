@@ -26,7 +26,7 @@ Apply the plugin to your project.
 
 ```groovy
 plugins {
-  id 'se.solrike.conventions.java-conventions' version '1.0.0-beta.5'
+  id 'se.solrike.conventions.java-conventions' version '1.0.0-beta.6'
 }
 ```
 
