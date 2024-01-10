@@ -152,7 +152,7 @@ sonarlint {
   ]
   dependencies {
     //sonarlintPlugins 'com.sonarsource.secrets:sonar-secrets-plugin:1.1.0.36766'
-    sonarlintPlugins 'org.sonarsource.java:sonar-java-plugin:7.17.0.31219'
+    sonarlintPlugins 'org.sonarsource.java:sonar-java-plugin:7.30.1.34514'
     sonarlintPlugins 'org.sonarsource.xml:sonar-xml-plugin:2.6.1.3686'
   }
   showIssues = false
